@@ -13,17 +13,18 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh; /* FIXED */
+    padding: 40px 20px; /* space for laptop screens */
 }
 
-/* Main Card */
+/* Card */
 .box {
     background: white;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-    width: 380px;
+    width: 420px;
+    max-width: 95%;
     text-align: center;
     position: relative;
     z-index: 10;
@@ -36,12 +37,12 @@ img {
 }
 
 h1 { color: #ff4d6d; margin: 10px 0; }
-p { margin: 5px 0 10px; }
+h2 { margin: 10px 0 15px; }
 
 /* Buttons */
 button {
-    padding: 12px 25px;
-    margin: 15px 10px 0;
+    padding: 12px 28px;
+    margin: 12px;
     border: none;
     border-radius: 30px;
     font-size: 16px;
@@ -50,17 +51,17 @@ button {
 }
 
 #yesBtn { background: #ff4d6d; color: white; }
-#yesBtn:hover { transform: scale(1.08); }
+#yesBtn:hover { transform: scale(1.1); }
 
 #noBtn {
     background: #ccc;
     position: fixed;
-    left: 60%;
-    top: 70%;
-    transition: left 0.25s ease, top 0.25s ease;
+    left: 65%;
+    top: 75%;
+    transition: left 0.3s ease, top 0.3s ease;
 }
 
-/* Floating hearts */
+/* Hearts */
 .heart {
     position: fixed;
     color: #ff4d6d;
@@ -90,28 +91,26 @@ button {
 <button id="noBtn">No 🙄</button>
 
 <script>
-// YES BUTTON
+// YES
 document.getElementById("yesBtn").onclick = function() {
     document.body.innerHTML = `
-    <div style="text-align:center;padding:40px;font-family:Arial;">
-        <img src="us.jpg" style="width:260px;border-radius:15px;"><br>
+    <div style="text-align:center;padding:60px;font-family:Arial;">
+        <img src="us.jpg" style="width:280px;border-radius:15px;"><br>
         <h1 style="color:#ff4d6d;">KHUSHI SAID YESSS 🥳💖</h1>
         <h2>Sanket + Khushi = Official Valentine Duo 💑✨</h2>
         <p>This screenshot is now a legal love contract.</p>
     </div>`;
 };
 
-// Smooth moving NO button
+// Smooth NO
 const noBtn = document.getElementById("noBtn");
-
 document.addEventListener("mousemove", (e) => {
     const rect = noBtn.getBoundingClientRect();
     const btnX = rect.left + rect.width / 2;
     const btnY = rect.top + rect.height / 2;
-
     const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
-    if (distance < 120) {
+    if (distance < 130) {
         const newX = Math.random() * (window.innerWidth - rect.width);
         const newY = Math.random() * (window.innerHeight - rect.height);
         noBtn.style.left = newX + "px";
