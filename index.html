@@ -1,0 +1,44 @@
+<script>
+function sayYes(){
+    document.body.innerHTML = `
+    <div style="text-align:center;padding:40px;font-family:Comic Sans MS;">
+        <img src="us.jpg" style="width:250px;border-radius:15px;"><br>
+        <h1 style="color:#ff4d6d;">KHUSHI SAID YESSS 🥳💖</h1>
+        <h2>Sanket + Khushi = Official Valentine Duo 💑✨</h2>
+        <p>This screenshot is now a legal love contract.</p>
+        <p>Benefits include: hugs, memes, and Sanket being annoying forever.</p>
+    </div>`;
+}
+
+const noBtn = document.getElementById("noBtn");
+
+// Make button run from cursor
+document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const btnX = rect.left + rect.width / 2;
+    const btnY = rect.top + rect.height / 2;
+
+    const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
+
+    if (distance < 120) { // trigger distance
+        const newX = Math.random() * (window.innerWidth - rect.width);
+        const newY = Math.random() * (window.innerHeight - rect.height);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+    }
+});
+
+// Floating hearts
+function createHeart(){
+    const heart = document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="💖";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=(Math.random()*20+15)+"px";
+    heart.style.animationDuration=(Math.random()*3+3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart,300);
+</script>
