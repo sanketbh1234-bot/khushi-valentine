@@ -13,52 +13,54 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* FIXED */
-    padding: 40px 20px; /* space for laptop screens */
+    min-height: 100vh;
+    padding: 20px;
 }
 
-/* Card */
 .box {
     background: white;
-    padding: 30px;
+    padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-    width: 420px;
-    max-width: 95%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 360px;
     text-align: center;
-    position: relative;
-    z-index: 10;
 }
 
 img {
     width: 100%;
     border-radius: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-h1 { color: #ff4d6d; margin: 10px 0; }
+h1 { color: #ff4d6d; font-size: 22px; }
 h2 { margin: 10px 0 15px; }
 
-/* Buttons */
+/* Buttons row */
+.btnRow {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
 button {
-    padding: 12px 28px;
-    margin: 12px;
+    padding: 12px 20px;
     border: none;
     border-radius: 30px;
     font-size: 16px;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease;
 }
 
-#yesBtn { background: #ff4d6d; color: white; }
-#yesBtn:hover { transform: scale(1.1); }
+#yesBtn {
+    background: #ff4d6d;
+    color: white;
+    transform: scale(1);
+}
 
 #noBtn {
     background: #ccc;
-    position: fixed;
-    left: 65%;
-    top: 75%;
-    transition: left 0.3s ease, top 0.3s ease;
 }
 
 /* Hearts */
@@ -67,7 +69,7 @@ button {
     color: #ff4d6d;
     animation: floatUp 6s linear infinite;
     opacity: 0.7;
-    z-index: 1;
+    z-index: 0;
 }
 
 @keyframes floatUp {
@@ -85,37 +87,46 @@ button {
     <h1>Hey Khushi 😏</h1>
     <p>Look at us… kinda cute ngl.</p>
     <h2>Will you be my Valentine? 💖</h2>
-    <button id="yesBtn">YES 💘</button>
+
+    <div class="btnRow">
+        <button id="yesBtn">YES 💘</button>
+        <button id="noBtn">No 🙄</button>
+    </div>
 </div>
 
-<button id="noBtn">No 🙄</button>
-
 <script>
-// YES
-document.getElementById("yesBtn").onclick = function() {
+let scale = 1;
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+// YES clicked
+yesBtn.onclick = function() {
     document.body.innerHTML = `
-    <div style="text-align:center;padding:60px;font-family:Arial;">
-        <img src="us.jpg" style="width:280px;border-radius:15px;"><br>
+    <div style="text-align:center;padding:50px;font-family:Arial;">
+        <img src="us.jpg" style="width:260px;border-radius:15px;"><br>
         <h1 style="color:#ff4d6d;">KHUSHI SAID YESSS 🥳💖</h1>
         <h2>Sanket + Khushi = Official Valentine Duo 💑✨</h2>
         <p>This screenshot is now a legal love contract.</p>
     </div>`;
 };
 
-// Smooth NO
-const noBtn = document.getElementById("noBtn");
-document.addEventListener("mousemove", (e) => {
+// When cursor/finger comes near NO → YES grows
+function powerUpYes(e) {
     const rect = noBtn.getBoundingClientRect();
     const btnX = rect.left + rect.width / 2;
     const btnY = rect.top + rect.height / 2;
     const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
-    if (distance < 130) {
-        const newX = Math.random() * (window.innerWidth - rect.width);
-        const newY = Math.random() * (window.innerHeight - rect.height);
-        noBtn.style.left = newX + "px";
-        noBtn.style.top = newY + "px";
+    if (distance < 120) {
+        scale += 0.15;
+        yesBtn.style.transform = `scale(${scale})`;
     }
+}
+
+// Works for mouse + touch
+document.addEventListener("mousemove", powerUpYes);
+document.addEventListener("touchmove", (e) => {
+    powerUpYes(e.touches[0]);
 });
 
 // Hearts
