@@ -25,6 +25,8 @@ body {
     width: 100%;
     max-width: 360px;
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 img {
@@ -36,7 +38,6 @@ img {
 h1 { color: #ff4d6d; font-size: 22px; }
 h2 { margin: 10px 0 15px; }
 
-/* Buttons row */
 .btnRow {
     display: flex;
     justify-content: center;
@@ -63,7 +64,7 @@ button {
     background: #ccc;
 }
 
-/* Hearts */
+/* Floating hearts */
 .heart {
     position: fixed;
     color: #ff4d6d;
@@ -96,10 +97,11 @@ button {
 
 <script>
 let scale = 1;
+let growing = false;
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
-// YES clicked
+// YES CLICK
 yesBtn.onclick = function() {
     document.body.innerHTML = `
     <div style="text-align:center;padding:50px;font-family:Arial;">
@@ -107,27 +109,34 @@ yesBtn.onclick = function() {
         <h1 style="color:#ff4d6d;">KHUSHI SAID YESSS 🥳💖</h1>
         <h2>Sanket + Khushi = Official Valentine Duo 💑✨</h2>
         <p>This screenshot is now a legal love contract.</p>
+        <p style="margin-top:15px;font-weight:bold;">
+            You are mine anyway 😈
+        </p>
     </div>`;
 };
 
-// When cursor/finger comes near NO → YES grows
-function powerUpYes(e) {
+// Detect proximity to NO
+function checkProximity(e) {
     const rect = noBtn.getBoundingClientRect();
     const btnX = rect.left + rect.width / 2;
     const btnY = rect.top + rect.height / 2;
     const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
-    if (distance < 120) {
-        scale += 0.15;
-        yesBtn.style.transform = `scale(${scale})`;
-    }
+    growing = distance < 130;
 }
 
-// Works for mouse + touch
-document.addEventListener("mousemove", powerUpYes);
-document.addEventListener("touchmove", (e) => {
-    powerUpYes(e.touches[0]);
-});
+// Smooth YES growth
+function growYes() {
+    if (growing && scale < 3) {
+        scale += 0.01;
+        yesBtn.style.transform = `scale(${scale})`;
+    }
+    requestAnimationFrame(growYes);
+}
+growYes();
+
+document.addEventListener("mousemove", checkProximity);
+document.addEventListener("touchmove", (e) => checkProximity(e.touches[0]));
 
 // Hearts
 function createHeart() {
